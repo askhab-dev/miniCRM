@@ -4,6 +4,8 @@
   import Loader from './Loader.svelte';
   import Error from './Error.svelte';
   import type { Client } from '../types/client';
+  import { getValidDate } from '../utils/date';
+  import { isVip } from '../utils/vip';
 
   const queryResult = useQuery('clients', async () => {
     const clients = await fetchClients();
@@ -126,10 +128,6 @@
     }
   }
 
-  const getValidDate = (date: Client['createdAt']) => {
-    return date && Date.parse(date) ? new Date(date).toLocaleDateString() : '-';
-  }
-
   type TableColumn = { label: string; sortable?: boolean };
   const COLUMNS: TableColumn[] = [
     { label: 'ID' },
@@ -138,7 +136,8 @@
     { label: 'Статус' },
     { label: 'Баланс ($)' },
     { label: 'Дата создания' },
-    { label: 'Дубль', sortable: false }
+    { label: 'Дубль', sortable: false },
+    { label: 'VIP', sortable: false },
   ];
 
   $: filterButtonText = selectedStatuses.includes('All') 
@@ -243,6 +242,7 @@
               <td class="balance">{client.balance === null ? '-' : client.balance}</td>
               <td>{getValidDate(client.createdAt)}</td>
               <td>{isDuplicate(client.id) ? '✅' : ''}</td>
+              <td>{isVip(client) ? '✅' : ''}</td>
             </tr>
           {/each}
         </tbody>
