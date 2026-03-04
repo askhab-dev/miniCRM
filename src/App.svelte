@@ -4,7 +4,19 @@
   import Header from './components/Header.svelte';
   import ClientsList from './components/ClientsList.svelte';
 
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        refetchOnMount: true,
+        retry: 3,
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 10 * 60 * 1000,
+      },
+    },
+  });
+
 </script>
 
 <QueryClientProvider client={queryClient}>
