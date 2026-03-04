@@ -93,4 +93,10 @@
     font-weight: 600;
     font-size: 16px;
   }
+
+  @media (max-width: 768px) {
+    .nav {
+      display: none;
+    }
+  }
 </style>
