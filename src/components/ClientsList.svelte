@@ -9,7 +9,7 @@
     const clients = await fetchClients();
 
     if (clients.length > 0) {
-      return clients;
+      return clients as Client[];
     };
 
     // Выкинем ошибку для авто-ретрая запроса.
@@ -22,6 +22,10 @@
 
   let showFilter = false;
   let selectedStatuses = ['All'];
+  
+  let sortColumn: string | null = null;
+  let sortDirection: 'asc' | 'desc' = 'asc';
+
   const statusOptions = [
     { value: 'All', label: 'Все', color: '#6c757d' },
     { value: 'active', label: 'Активные', color: '#28a745' },
@@ -53,6 +57,38 @@
     }
   }
 
+  function handleSort(column: string) {
+    if (sortColumn === column) {
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortColumn = column;
+      sortDirection = 'asc';
+    }
+  }
+
+  function getSortValue(client: Client, column: string): any {
+    switch(column) {
+      case 'ID':
+        return client.id;
+      case 'Имя':
+        return client.name.toLowerCase();
+      case 'Email':
+        return client.email.toLowerCase();
+      case 'Статус':
+        return client.status;
+      case 'Баланс ($)':
+        // Для баланса: null/undefined считаем как -Infinity (минимальное значение)
+        return client.balance === null ? -Infinity : client.balance;
+      case 'Дата создания':
+        // Для даты: null/undefined считаем как минимальную дату
+        if (!client.createdAt) return -Infinity;
+        const date = new Date(client.createdAt);
+        return isNaN(date.getTime()) ? -Infinity : date.getTime();
+      default:
+        return '';
+    }
+  }
+
   const idCache = new Set();
   const isDuplicate = (id: number) => {
     if (idCache.has(id)) {
@@ -67,10 +103,22 @@
   $: isFetching = $queryResult.isFetching;
   $: error = $queryResult.error as Error;
   $: allClients = $queryResult.data?.sort((a, b) => a.id - b.id) || [];
-  
-  $: filteredClients = selectedStatuses.includes('All') 
+
+  // Сначала фильтруем, потом сортируем
+  $: filteredClients = (selectedStatuses.includes('All') 
     ? allClients 
-    : allClients.filter(client => selectedStatuses.includes(client.status));
+    : allClients.filter(client => selectedStatuses.includes(client.status)))
+    .sort((a, b) => {
+      if (!sortColumn) return 0;
+
+      const valA = getSortValue(a, sortColumn);
+      const valB = getSortValue(b, sortColumn);
+
+      if (valA === valB) return 0;
+
+      const comparison = valA > valB ? 1 : -1;
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
 
   $: {
     if (filteredClients) {
@@ -82,8 +130,17 @@
     return date && Date.parse(date) ? new Date(date).toLocaleDateString() : '-';
   }
 
-  const COLUMNS_HEADERS = ['ID', 'Имя', 'Email', 'Статус', 'Баланс ($)', 'Дата создания', 'Дубль'];
-  
+  type TableColumn = { label: string; sortable?: boolean };
+  const COLUMNS: TableColumn[] = [
+    { label: 'ID' },
+    { label: 'Имя' },
+    { label: 'Email' },
+    { label: 'Статус' },
+    { label: 'Баланс ($)' },
+    { label: 'Дата создания' },
+    { label: 'Дубль', sortable: false }
+  ];
+
   $: filterButtonText = selectedStatuses.includes('All') 
     ? 'Все статусы' 
     : selectedStatuses.length === 1 
@@ -150,8 +207,24 @@
       <table class="clients-table">
         <thead>
           <tr>
-            {#each COLUMNS_HEADERS as head}
-              <th>{head}</th>
+            {#each COLUMNS as column}
+              {#if column.sortable !== false}
+                <th 
+                  on:click={() => handleSort(column.label)}
+                  class:sortable={true}
+                  class:sorted-asc={sortColumn === column.label && sortDirection === 'asc'}
+                  class:sorted-desc={sortColumn === column.label && sortDirection === 'desc'}
+                >
+                  {column.label}
+                  {#if sortColumn === column.label}
+                    <span class="sort-icon">
+                      {sortDirection === 'asc' ? ' ↑' : ' ↓'}
+                    </span>
+                  {/if}
+                </th>
+              {:else}
+                <th>{column.label}</th>
+              {/if}
             {/each}
           </tr>
         </thead>
@@ -328,12 +401,33 @@
   }
   
   .clients-table th {
+    position: relative;
     text-align: left;
     padding: 12px;
     background: #f8f9fa;
     color: #495057;
     font-weight: 600;
     border-bottom: 2px solid #dee2e6;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  
+  .clients-table th.sortable:hover {
+    background: #e9ecef;
+  }
+  
+  .clients-table th.sorted-asc,
+  .clients-table th.sorted-desc {
+    background: #e9ecef;
+    color: #007bff;
+  }
+  
+  .sort-icon {
+    position: absolute;
+    right: 12px;
+    top: 4px;
+    font-size: 22px;
   }
   
   .clients-table td {
