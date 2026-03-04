@@ -20,9 +20,41 @@
     $queryResult.refetch();
   };
 
+  let showFilter = false;
+  let selectedStatuses = ['All'];
+  const statusOptions = [
+    { value: 'All', label: 'Все', color: '#6c757d' },
+    { value: 'active', label: 'Активные', color: '#28a745' },
+    { value: 'inactive', label: 'Неактивные', color: '#dc3545' },
+    { value: 'blocked', label: 'Заблокированные', color: '#343a40' }
+  ];
+
+  function toggleStatusFilter() {
+    showFilter = !showFilter;
+  }
+
+  function handleStatusChange(statusValue: string) {
+    if (statusValue === 'All') {
+      selectedStatuses = ['All'];
+    } else {
+      if (selectedStatuses.includes('All')) {
+        selectedStatuses = [statusValue];
+      } else {
+        if (selectedStatuses.includes(statusValue)) {
+          selectedStatuses = selectedStatuses.filter(s => s !== statusValue);
+
+          if (selectedStatuses.length === 0) {
+            selectedStatuses = ['All'];
+          }
+        } else {
+          selectedStatuses = [...selectedStatuses, statusValue];
+        }
+      }
+    }
+  }
+
   const idCache = new Set();
   const isDuplicate = (id: number) => {
-    console.log(idCache)
     if (idCache.has(id)) {
       return true;
     } else {
@@ -34,9 +66,14 @@
 
   $: isFetching = $queryResult.isFetching;
   $: error = $queryResult.error as Error;
-  $: clients = $queryResult.data?.sort((a, b) => a.id - b.id) || [];
+  $: allClients = $queryResult.data?.sort((a, b) => a.id - b.id) || [];
+  
+  $: filteredClients = selectedStatuses.includes('All') 
+    ? allClients 
+    : allClients.filter(client => selectedStatuses.includes(client.status));
+
   $: {
-    if (clients) {
+    if (filteredClients) {
       idCache.clear();
     }
   }
@@ -45,15 +82,61 @@
     return date && Date.parse(date) ? new Date(date).toLocaleDateString() : '-';
   }
 
-  const COLUMNS_HEADERS = ['ID', 'Имя', 'Email', 'Статус', 'Баланс ($)', 'Дата создания', 'Дубль']
+  const COLUMNS_HEADERS = ['ID', 'Имя', 'Email', 'Статус', 'Баланс ($)', 'Дата создания', 'Дубль'];
+  
+  $: filterButtonText = selectedStatuses.includes('All') 
+    ? 'Все статусы' 
+    : selectedStatuses.length === 1 
+      ? statusOptions.find(opt => opt.value === selectedStatuses[0])?.label 
+      : `Выбрано (${selectedStatuses.length})`;
 </script>
 
 <section class="content">
   <div class="content-header">
     <h2>Список клиентов</h2>
-    <button on:click={retry} disabled={isFetching} class="refresh-btn">
-      {isFetching ? 'Обновление...' : '🔄 Обновить'}
-    </button>
+    <div class="header-actions">
+      <div class="filter-container">
+        <button 
+          on:click={toggleStatusFilter} 
+          class="filter-btn"
+          class:active={showFilter}
+        >
+          <span class="filter-icon">⚙️</span>
+          {filterButtonText}
+        </button>
+        
+        {#if showFilter}
+          <div class="filter-dropdown">
+            <div class="filter-header">
+              <h4>Фильтр по статусу</h4>
+            </div>
+
+            <div class="filter-options">
+              {#each statusOptions as status}
+                <label class="filter-option">
+                  <input
+                    type="checkbox"
+                    checked={selectedStatuses.includes(status.value)}
+                    on:change={() => handleStatusChange(status.value)}
+                  />
+                  <span
+                    class="status-badge" 
+                    style:background-color={status.color}
+                    style:color="white"
+                  >
+                    {status.label}
+                  </span>
+                </label>
+              {/each}
+            </div>
+          </div>
+        {/if}
+      </div>
+
+      <button on:click={retry} disabled={isFetching} class="refresh-btn">
+        {isFetching ? 'Обновление...' : '🔄 Обновить'}
+      </button>
+    </div>
   </div>
 
   {#if isFetching}
@@ -74,7 +157,7 @@
         </thead>
 
         <tbody>
-          {#each clients as client}
+          {#each filteredClients as client}
             <tr>
               <td>{client.id}</td>
               <td>{client.name}</td>
@@ -84,13 +167,19 @@
                   {client.status}
                 </span>
               </td>
-              <td class="balance">{client.balance === null ? '-' :  client.balance}</td>
+              <td class="balance">{client.balance === null ? '-' : client.balance}</td>
               <td>{getValidDate(client.createdAt)}</td>
               <td>{isDuplicate(client.id) ? '✅' : ''}</td>
             </tr>
           {/each}
         </tbody>
       </table>
+      
+      {#if filteredClients.length === 0}
+        <div class="no-results">
+          Нет клиентов с выбранными статусами
+        </div>
+      {/if}
     </div>
   {/if}
 </section>
@@ -122,6 +211,96 @@
     margin: 0;
   }
   
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .filter-container {
+    position: relative;
+  }
+  
+  .filter-btn {
+    padding: 8px 16px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  
+  .filter-btn:hover {
+    background: #e9ecef;
+  }
+  
+  .filter-btn.active {
+    background: #e9ecef;
+    border-color: #007bff;
+  }
+  
+  .filter-icon {
+    font-size: 16px;
+  }
+  
+  .filter-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 240px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    border: 1px solid #eee;
+    z-index: 1000;
+    overflow: hidden;
+  }
+  
+  .filter-header {
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .filter-header h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .filter-options {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .filter-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+  
+  .filter-option .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
   .refresh-btn {
     padding: 8px 16px;
     background: #007bff;
@@ -179,17 +358,17 @@
     background: #d4edda;
     color: #155724;
   }
-  
+
   .status-inactive {
     background: #f8d7da;
     color: #721c24;
   }
 
   .status-blocked {
-    background: #8d8d8d;
-    color: #ffffff;
+    background: #343a40;
+    color: white;
   }
-  
+
   .status-pending {
     background: #fff3cd;
     color: #856404;
@@ -198,6 +377,13 @@
   .balance {
     font-weight: 500;
     color: #28a745 !important;
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-size: 14px;
   }
   
   .updating-overlay {
