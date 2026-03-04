@@ -1,8 +1,8 @@
 <script lang="ts">
   import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query'
-  import Footer from './components/Footer.svelte';
-  import Header from './components/Header.svelte';
-  import ClientsList from './components/ClientsList.svelte';
+  import Footer from './components/Layout/Footer.svelte';
+  import Header from './components/Layout/Header.svelte';
+  import ClientsPage from './routes/ClientsPage.svelte';
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -22,11 +22,9 @@
 <QueryClientProvider client={queryClient}>
   <main class="app">
     <Header />
-
     <div class="layout">
-      <ClientsList />
+      <ClientsPage />
     </div>
-
     <Footer />
   </main>
 </QueryClientProvider>

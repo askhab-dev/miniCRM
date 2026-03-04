@@ -4,10 +4,10 @@
     <h1>miniCRM</h1>
 
     <nav class="nav">
-      <a href="#" class="nav-link active">Клиенты</a>
-      <a href="#" class="nav-link">Сделки</a>
-      <a href="#" class="nav-link">Задачи</a>
-      <a href="#" class="nav-link">Аналитика</a>
+      <button class="nav-link active">Клиенты</button>
+      <button class="nav-link">Сделки</button>
+      <button class="nav-link">Задачи</button>
+      <button class="nav-link">Аналитика</button>
     </nav>
 
     <div class="user-menu">
@@ -55,8 +55,11 @@
     font-size: 14px;
     font-weight: 500;
     padding: 4px 0;
+    border: none;
     border-bottom: 2px solid transparent;
     transition: all 0.2s;
+    background: none;
+    cursor: pointer;
   }
   
   .nav-link:hover {

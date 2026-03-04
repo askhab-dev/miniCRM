@@ -1,0 +1,80 @@
+<script lang="ts">
+  import { useClients } from '../hooks/useClients';
+  import { useFilter } from '../hooks/useFilter';
+  import { useSort } from '../hooks/useSort';
+  import { filteredAndSortedClients } from '../stores/clientsStore';
+  import { STATUS_OPTIONS, TABLE_COLUMNS } from '../utils/constants';
+  
+  import Loader from '../components/UI/Loader.svelte';
+  import Error from '../components/UI/Error.svelte';
+  import Button from '../components/UI/Button.svelte';
+  import Layout from '../components/Layout/Content.svelte';
+  import ContentHeader from '../components/Layout/ContentHeader.svelte';
+  import StatusFilter from '../components/Filter/StatusFilter.svelte';
+  import ClientsTable from '../components/ClientsTable/ClientsTable.svelte';
+
+  const queryResult = useClients();
+  const filter = useFilter();
+  const sort = useSort();
+
+  $: isFetching = $queryResult.isFetching;
+  $: error = $queryResult.error as Error;
+  $: filterState = $filter;
+  $: sortState = $sort;
+  $: filteredClients = $filteredAndSortedClients;
+
+  const retry = () => {
+    $queryResult.refetch();
+  };
+
+  const onSort = (column: string) => {
+    sort.setSortColumn(column);
+  };
+
+  const onStatusChange = (status: any) => {
+    filter.toggleStatus(status);
+  };
+</script>
+
+<Layout>
+  <ContentHeader>
+    <h2>Список клиентов</h2>
+    <div class="header-actions">
+      <StatusFilter
+        statusOptions={STATUS_OPTIONS}
+        selectedStatuses={filterState.selectedStatuses}
+        {onStatusChange}
+      />
+
+      <Button
+        variant="primary"
+        disabled={isFetching}
+        onClick={retry}
+      >
+        {isFetching ? 'Обновление...' : '🔄 Обновить'}
+      </Button>
+    </div>
+  </ContentHeader>
+
+  {#if isFetching}
+    <Loader />
+  {:else if error}
+    <Error error={error.message} onClick={retry} />
+  {:else}
+    <ClientsTable
+      clients={filteredClients}
+      columns={TABLE_COLUMNS}
+      sortColumn={sortState.sortColumn}
+      sortDirection={sortState.sortDirection}
+      {onSort}
+    />
+  {/if}
+</Layout>
+
+<style>
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+</style>
