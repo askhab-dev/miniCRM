@@ -5,7 +5,8 @@ export function useFilter() {
   return {
     subscribe: filterStore.subscribe,
     toggleStatus: (status: FilterStatus) => filterStore.toggleStatus(status),
-    setStatuses: (statuses: FilterStatus[]) => filterStore.setStatuses(statuses),
-    reset: () => filterStore.reset()
+    setStatuses: (statuses: FilterStatus[]) =>
+      filterStore.setStatuses(statuses),
+    reset: () => filterStore.reset(),
   };
 }

@@ -22,8 +22,10 @@
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
   }
-  
+
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>

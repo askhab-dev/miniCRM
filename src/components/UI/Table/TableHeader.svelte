@@ -4,7 +4,7 @@
   export let onSort: (() => void) | undefined = undefined;
 </script>
 
-<th 
+<th
   class:sortable
   class:sorted-asc={sorted === 'asc'}
   class:sorted-desc={sorted === 'desc'}

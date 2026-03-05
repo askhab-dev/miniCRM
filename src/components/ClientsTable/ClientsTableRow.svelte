@@ -8,7 +8,7 @@
   export let client: Client;
   export let isDuplicate: boolean = false;
 
-  $: statusType = client.status as any;
+  $: statusType = client.status;
 </script>
 
 <tr>

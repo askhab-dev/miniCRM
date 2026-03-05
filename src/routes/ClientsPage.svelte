@@ -5,7 +5,7 @@
   import { useSearch } from '../hooks/useSearch';
   import { filteredAndSortedClients } from '../stores/clientsStore';
   import { STATUS_OPTIONS, TABLE_COLUMNS } from '../utils/constants';
-  
+
   import Loader from '../components/UI/Loader.svelte';
   import Error from '../components/UI/Error.svelte';
   import Button from '../components/UI/Button.svelte';
@@ -14,6 +14,7 @@
   import StatusFilter from '../components/Filter/StatusFilter.svelte';
   import SearchInput from '../components/UI/SearchInput.svelte';
   import ClientsTable from '../components/ClientsTable/ClientsTable.svelte';
+  import type { FilterStatus } from '../types/filter';
 
   const queryResult = useClients();
   const filter = useFilter();
@@ -35,7 +36,7 @@
     sort.setSortColumn(column);
   };
 
-  const onStatusChange = (status: any) => {
+  const onStatusChange = (status: FilterStatus) => {
     filter.toggleStatus(status);
   };
 
@@ -64,11 +65,7 @@
         {onStatusChange}
       />
 
-      <Button
-        variant="primary"
-        disabled={isFetching}
-        onClick={retry}
-      >
+      <Button variant="primary" disabled={isFetching} onClick={retry}>
         {isFetching ? 'Обновление...' : '🔄 Обновить'}
       </Button>
     </div>

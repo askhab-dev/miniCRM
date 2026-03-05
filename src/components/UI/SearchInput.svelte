@@ -32,7 +32,7 @@
       bind:this={inputElement}
       type="text"
       {placeholder}
-      value={value}
+      {value}
       on:input={handleInput}
       on:keydown={handleKeydown}
       class="search-input"
@@ -71,7 +71,9 @@
     border-radius: 6px;
     font-size: 14px;
     background: white;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
   }
 
   .search-input:focus {
@@ -111,7 +113,9 @@
     justify-content: center;
     width: 20px;
     height: 20px;
-    transition: background-color 0.2s, color 0.2s;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
   }
 
   .clear-button:hover {

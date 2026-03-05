@@ -1,7 +1,9 @@
 import type { Client } from '../types/client';
 
 function getSortValue(client: Client, column: string) {
-  switch(column) {
+  let date: Date | null = null;
+
+  switch (column) {
     case 'ID':
       return client.id;
     case 'Имя':
@@ -16,7 +18,9 @@ function getSortValue(client: Client, column: string) {
     case 'Дата создания':
       // Для даты: null/undefined считаем как минимальную дату
       if (!client.createdAt) return -Infinity;
-      const date = new Date(client.createdAt);
+
+      date = new Date(client.createdAt);
+
       return isNaN(date.getTime()) ? -Infinity : date.getTime();
     default:
       return '';
@@ -26,7 +30,7 @@ function getSortValue(client: Client, column: string) {
 export function sortClients(
   clients: Client[],
   sortColumn: string | null,
-  sortDirection: 'asc' | 'desc'
+  sortDirection: 'asc' | 'desc',
 ): Client[] {
   if (!sortColumn) return clients;
 

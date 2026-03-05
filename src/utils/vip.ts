@@ -1,4 +1,4 @@
-import type { Client } from '../types/client'
+import type { Client } from '../types/client';
 import { getValidDate, isMoreThan30Days } from './date';
 
 export function isVip(client: Client): boolean {

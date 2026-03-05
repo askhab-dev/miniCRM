@@ -10,6 +10,6 @@ export function useDuplicateDetection() {
       }
       return false;
     },
-    reset: () => idCache.clear()
+    reset: () => idCache.clear(),
   };
 }

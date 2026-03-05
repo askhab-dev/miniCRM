@@ -10,7 +10,7 @@
 
 <thead>
   <tr>
-    {#each columns as column}
+    {#each columns as column (column.label)}
       {#if column.sortable !== false}
         <TableHeader
           sortable={true}

@@ -5,6 +5,6 @@ export function useSearch() {
     subscribe: searchStore.subscribe,
     setSearch: (query: string) => searchStore.setSearch(query),
     clear: () => searchStore.clear(),
-    reset: () => searchStore.reset()
+    reset: () => searchStore.reset(),
   };
 }

@@ -7,7 +7,7 @@ function createSearchStore() {
     subscribe,
     setSearch: (query: string) => set(query),
     clear: () => set(''),
-    reset: () => set('')
+    reset: () => set(''),
   };
 }
 

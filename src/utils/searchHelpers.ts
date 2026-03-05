@@ -20,5 +20,5 @@ export function fuzzySearch(clients: Client[], query: string): Client[] {
   const fuse = createFuseSearch(clients);
   const results = fuse.search(query);
 
-  return results.map(result => result.item);
+  return results.map((result) => result.item);
 }

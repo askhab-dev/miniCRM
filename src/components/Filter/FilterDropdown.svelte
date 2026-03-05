@@ -12,7 +12,7 @@
   </div>
 
   <div class="filter-options">
-    {#each statusOptions as status}
+    {#each statusOptions as status (status.value)}
       <label class="filter-option">
         <input
           type="checkbox"
@@ -20,7 +20,7 @@
           on:change={() => onStatusChange(status.value)}
         />
         <span
-          class="status-badge" 
+          class="status-badge"
           style:background-color={status.color}
           style:color="white"
         >
@@ -39,7 +39,7 @@
     width: 240px;
     background: white;
     border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border: 1px solid #eee;
     z-index: 1000;
     overflow: hidden;
@@ -73,7 +73,7 @@
     font-size: 14px;
   }
 
-  .filter-option input[type="checkbox"] {
+  .filter-option input[type='checkbox'] {
     width: 16px;
     height: 16px;
     cursor: pointer;

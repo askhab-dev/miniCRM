@@ -5,11 +5,11 @@
 export const isMoreThan30Days = (dateString: string) => {
   const targetDate = new Date(dateString);
   const currentDate = new Date();
-  
+
   // Устанавливаем время на начало дня для чистого сравнения
   targetDate.setHours(0, 0, 0, 0);
   currentDate.setHours(0, 0, 0, 0);
-  
+
   const diffMs = Number(currentDate) - Number(targetDate);
   const diffDays = diffMs / (1000 * 60 * 60 * 24);
 

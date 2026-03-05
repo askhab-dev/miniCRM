@@ -5,7 +5,7 @@ export const STATUS_OPTIONS: StatusOption[] = [
   { value: 'All', label: 'Все', color: '#6c757d' },
   { value: 'active', label: 'Активные', color: '#28a745' },
   { value: 'inactive', label: 'Неактивные', color: '#dc3545' },
-  { value: 'blocked', label: 'Заблокированные', color: '#343a40' }
+  { value: 'blocked', label: 'Заблокированные', color: '#343a40' },
 ];
 
 export const TABLE_COLUMNS: TableColumn[] = [

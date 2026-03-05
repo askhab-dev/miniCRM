@@ -8,12 +8,14 @@ import { sortClients } from '../utils/sortHelpers';
 import { fuzzySearch } from '../utils/searchHelpers';
 
 function createClientsStore() {
-  const { subscribe: subscribeClients, set: setClients } = writable<Client[]>([]);
+  const { subscribe: subscribeClients, set: setClients } = writable<Client[]>(
+    [],
+  );
 
   return {
     subscribe: subscribeClients,
     setClients,
-    reset: () => setClients([])
+    reset: () => setClients([]),
   };
 }
 
@@ -29,5 +31,5 @@ export const filteredAndSortedClients = derived(
     const sorted = sortClients(searched, $sort.sortColumn, $sort.sortDirection);
 
     return sorted;
-  }
+  },
 );

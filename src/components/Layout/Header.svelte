@@ -1,4 +1,3 @@
-
 <header class="header">
   <div class="header-content">
     <h1>miniCRM</h1>
@@ -20,12 +19,12 @@
 <style>
   .header {
     background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 10;
   }
-  
+
   .header-content {
     max-width: 1400px;
     margin: 0 auto;
@@ -35,20 +34,20 @@
     align-items: center;
     justify-content: space-between;
   }
-  
+
   .header h1 {
     font-size: 20px;
     font-weight: 600;
     color: #2c3e50;
     letter-spacing: -0.3px;
   }
-  
+
   .nav {
     display: flex;
     gap: 24px;
     margin-left: 48px;
   }
-  
+
   .nav-link {
     color: #666;
     text-decoration: none;
@@ -61,29 +60,29 @@
     background: none;
     cursor: pointer;
   }
-  
+
   .nav-link:hover {
     color: #333;
   }
-  
+
   .nav-link.active {
     color: #007bff;
     border-bottom-color: #007bff;
   }
-  
+
   .user-menu {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-left: auto;
   }
-  
+
   .user-name {
     font-size: 14px;
     font-weight: 500;
     color: #333;
   }
-  
+
   .user-avatar {
     width: 36px;
     height: 36px;

@@ -10,7 +10,7 @@
     border-top: 1px solid #eee;
     margin-top: auto;
   }
-  
+
   .footer-content {
     max-width: 1400px;
     margin: 0 auto;

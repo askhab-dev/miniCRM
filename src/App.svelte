@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query'
+  import { QueryClient, QueryClientProvider } from '@sveltestack/svelte-query';
   import Footer from './components/Layout/Footer.svelte';
   import Header from './components/Layout/Header.svelte';
   import ClientsPage from './routes/ClientsPage.svelte';
@@ -16,7 +16,6 @@
       },
     },
   });
-
 </script>
 
 <QueryClientProvider client={queryClient}>
@@ -35,7 +34,7 @@
     display: flex;
     flex-direction: column;
   }
-  
+
   .layout {
     display: flex;
     flex: 1;
@@ -50,5 +49,4 @@
       padding: 24px 0;
     }
   }
-
 </style>

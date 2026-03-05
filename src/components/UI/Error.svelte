@@ -7,10 +7,7 @@
   <div class="error-icon">⚠️</div>
   <p class="error-message">{error}</p>
   {#if onClick}
-    <button 
-      class="btn btn-primary" 
-      on:click={onClick}
-    >
+    <button class="btn btn-primary" on:click={onClick}>
       Попробовать снова
     </button>
   {/if}
@@ -25,12 +22,12 @@
     padding: 60px 20px;
     text-align: center;
   }
-  
+
   .error-icon {
     font-size: 48px;
     margin-bottom: 16px;
   }
-  
+
   .error-message {
     color: #dc3545;
     margin-bottom: 20px;

@@ -22,20 +22,12 @@
 
 <div class="table-wrapper">
   <table class="clients-table">
-    <ClientsTableHeader
-      {columns}
-      {sortColumn}
-      {sortDirection}
-      {onSort}
-    />
+    <ClientsTableHeader {columns} {sortColumn} {sortDirection} {onSort} />
 
     {#if clients.length > 0}
       <tbody>
-        {#each clients as client}
-          <ClientsTableRow
-            {client}
-            isDuplicate={isDuplicate(client.id)}
-          />
+        {#each clients as client, idx (idx)}
+          <ClientsTableRow {client} isDuplicate={isDuplicate(client.id)} />
         {/each}
       </tbody>
     {/if}

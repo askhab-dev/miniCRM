@@ -13,23 +13,19 @@
 
   const toggleFilter = () => {
     showFilter = !showFilter;
-  }
+  };
 
   const handleStatusChange = (status: FilterStatus) => {
     onStatusChange(status);
-  }
+  };
 
   $: {
-      buttonText = getFilterButtonText(selectedStatuses, statusOptions)
-  };
+    buttonText = getFilterButtonText(selectedStatuses, statusOptions);
+  }
 </script>
 
 <div class="filter-container">
-  <FilterButton
-    active={showFilter}
-    text={buttonText}
-    onClick={toggleFilter}
-  />
+  <FilterButton active={showFilter} text={buttonText} onClick={toggleFilter} />
 
   {#if showFilter}
     <FilterDropdown

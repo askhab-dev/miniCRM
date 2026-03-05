@@ -1,10 +1,10 @@
 import { writable } from 'svelte/store';
-import type { SortState, SortDirection } from '../types/sort';
+import type { SortState } from '../types/sort';
 
 function createSortStore() {
   const initialState: SortState = {
     sortColumn: null,
-    sortDirection: 'asc'
+    sortDirection: 'asc',
   };
 
   const { subscribe, set, update } = writable<SortState>(initialState);
@@ -12,21 +12,21 @@ function createSortStore() {
   return {
     subscribe,
     setSortColumn: (column: string | null) => {
-      update(state => {
+      update((state) => {
         if (state.sortColumn === column) {
           return {
             ...state,
-            sortDirection: state.sortDirection === 'asc' ? 'desc' : 'asc'
+            sortDirection: state.sortDirection === 'asc' ? 'desc' : 'asc',
           };
         } else {
           return {
             sortColumn: column,
-            sortDirection: 'asc'
+            sortDirection: 'asc',
           };
         }
       });
     },
-    reset: () => set(initialState)
+    reset: () => set(initialState),
   };
 }
 

@@ -8,11 +8,7 @@
   export let onClick: (() => void) | undefined = undefined;
 </script>
 
-<button
-  class="btn btn-{variant} btn-{size}"
-  {disabled}
-  on:click={onClick}
->
+<button class="btn btn-{variant} btn-{size}" {disabled} on:click={onClick}>
   <slot />
 </button>
 

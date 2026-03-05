@@ -6,11 +6,7 @@
   export let onClick: (() => void) | undefined = undefined;
 </script>
 
-<Button
-  variant={active ? 'primary' : 'secondary'}
-  size="md"
-  {onClick}
->
+<Button variant={active ? 'primary' : 'secondary'} size="md" {onClick}>
   <span class="filter-icon">⚙️</span>
   {text}
 </Button>
