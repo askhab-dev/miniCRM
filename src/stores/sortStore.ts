@@ -3,7 +3,7 @@ import type { SortState } from '../types/sort';
 
 function createSortStore() {
   const initialState: SortState = {
-    sortColumn: null,
+    sortColumn: 'ID',
     sortDirection: 'asc',
   };
 

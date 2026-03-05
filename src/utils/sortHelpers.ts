@@ -32,11 +32,12 @@ export function sortClients(
   sortColumn: string | null,
   sortDirection: 'asc' | 'desc',
 ): Client[] {
-  if (!sortColumn) return clients;
+  // По умолчанию сортируем по ID, если колонка не задана
+  const columnToSort = sortColumn || 'ID';
 
   return [...clients].sort((a, b) => {
-    const valA = getSortValue(a, sortColumn);
-    const valB = getSortValue(b, sortColumn);
+    const valA = getSortValue(a, columnToSort);
+    const valB = getSortValue(b, columnToSort);
 
     if (valA === valB) return 0;
 
