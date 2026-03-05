@@ -2,6 +2,7 @@
   import { useClients } from '../hooks/useClients';
   import { useFilter } from '../hooks/useFilter';
   import { useSort } from '../hooks/useSort';
+  import { useSearch } from '../hooks/useSearch';
   import { filteredAndSortedClients } from '../stores/clientsStore';
   import { STATUS_OPTIONS, TABLE_COLUMNS } from '../utils/constants';
   
@@ -11,16 +12,19 @@
   import Layout from '../components/Layout/Content.svelte';
   import ContentHeader from '../components/Layout/ContentHeader.svelte';
   import StatusFilter from '../components/Filter/StatusFilter.svelte';
+  import SearchInput from '../components/Search/SearchInput.svelte';
   import ClientsTable from '../components/ClientsTable/ClientsTable.svelte';
 
   const queryResult = useClients();
   const filter = useFilter();
   const sort = useSort();
+  const search = useSearch();
 
   $: isFetching = $queryResult.isFetching;
   $: error = $queryResult.error as Error;
   $: filterState = $filter;
   $: sortState = $sort;
+  $: searchState = $search;
   $: filteredClients = $filteredAndSortedClients;
 
   const retry = () => {
@@ -34,12 +38,26 @@
   const onStatusChange = (status: any) => {
     filter.toggleStatus(status);
   };
+
+  const onSearchInput = (query: string) => {
+    search.setSearch(query);
+  };
+
+  const onSearchClear = () => {
+    search.clear();
+  };
 </script>
 
 <Layout>
   <ContentHeader>
     <h2>Список клиентов</h2>
     <div class="header-actions">
+      <SearchInput
+        value={searchState}
+        placeholder="Поиск по имени или email..."
+        onInput={onSearchInput}
+        onClear={onSearchClear}
+      />
       <StatusFilter
         statusOptions={STATUS_OPTIONS}
         selectedStatuses={filterState.selectedStatuses}
