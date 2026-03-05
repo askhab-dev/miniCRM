@@ -48,6 +48,7 @@
    - `types/sort.ts` - типы сортировки
 
 5. **Components/**:
+
    **ClientsTable/** - компоненты таблицы:
    - `ClientsTable.svelte` - основной компонент таблицы
    - `ClientsTableHeader.svelte` - заголовок с сортировкой
