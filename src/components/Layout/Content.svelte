@@ -11,5 +11,6 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     min-height: 600px;
     position: relative;
+    overflow-x: scroll;
   }
 </style>

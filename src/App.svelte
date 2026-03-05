@@ -45,4 +45,10 @@
     padding: 24px;
   }
 
+  @media (max-width: 1024px) {
+    .layout {
+      padding: 24px 0;
+    }
+  }
+
 </style>

@@ -12,7 +12,7 @@
   import Layout from '../components/Layout/Content.svelte';
   import ContentHeader from '../components/Layout/ContentHeader.svelte';
   import StatusFilter from '../components/Filter/StatusFilter.svelte';
-  import SearchInput from '../components/Search/SearchInput.svelte';
+  import SearchInput from '../components/UI/SearchInput.svelte';
   import ClientsTable from '../components/ClientsTable/ClientsTable.svelte';
 
   const queryResult = useClients();
