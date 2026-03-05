@@ -1,3 +1,6 @@
+# Demo
+[https://minicrm-flax.vercel.app/](https://minicrm-flax.vercel.app/)
+
 # Инструкция по запуску
 ```
 npm i && npm run build && npm run preview
